@@ -1,8 +1,0 @@
-core.repositoryformatversion=0
-core.filemode=true
-core.bare=false
-core.logallrefupdates=true
-remote.origin.url=https://github.com/Hachemmy/valentine-rdv.git
-remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
-user.name=hachemmy
-user.email=hachejoven@gmail.com
