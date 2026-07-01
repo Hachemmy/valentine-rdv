@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demande de rendez-vous 💕</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ffe6f2, #ffd6e8);
+      color: #7a1f4d;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 24px;
+      padding: 30px;
+      width: min(100%, 480px);
+      box-shadow: 0 15px 35px rgba(122, 31, 77, 0.2);
+      text-align: center;
+      animation: fadeIn 0.8s ease;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      color: #d81b60;
+    }
+
+    p {
+      line-height: 1.6;
+      margin-bottom: 20px;
+      color: #8a4464;
+    }
+
+    .heart {
+      font-size: 2rem;
+      animation: pulse 1.2s infinite alternate;
+      margin-bottom: 10px;
+    }
+
+    .buttons {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80px;
+      margin-top: 20px;
+      padding: 10px 0;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-primary {
+      background: #ff4d8d;
+      color: white;
+      z-index: 2;
+    }
+
+    .btn-secondary {
+      background: #f8dce8;
+      color: #9b2c5c;
+      position: absolute;
+      left: calc(50% + 80px);
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      transition: left 0.2s ease, top 0.2s ease;
+    }
+
+    .form-section {
+      display: none;
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .form-section.show {
+      display: block;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #7a1f4d;
+    }
+
+    select,
+    input[type="date"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #f2b8cc;
+      border-radius: 12px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .submit-btn {
+      margin-top: 18px;
+      width: 100%;
+      background: linear-gradient(135deg, #ff4d8d, #ff6fae);
+      color: white;
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 12px;
+      background: #fff0f6;
+      color: #b23b68;
+      display: none;
+      font-weight: 600;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    @keyframes pulse {
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.15);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="heart">💖</div>
+    <h1>Veux-tu sortir avec moi ?</h1>
+    <p>Je voulais te faire une surprise... Choisis ce que tu préfères et sélectionne une date, puis envoie ta réponse
+      directement par e-mail.</p>
+
+    <div class="buttons" id="buttons">
+      <button class="btn-primary" id="yesBtn" type="button" onclick="showForm()">Oui, bien sûr 💌</button>
+      <button class="btn-secondary" id="noBtn" type="button">Non 😅</button>
+    </div>
+
+    <form id="dateForm" class="form-section" action="https://formsubmit.co/hachejoven@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="Nouvelle réponse de rendez-vous" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="_next" value="./valentine5.html?submitted=true" />
+
+      <label for="activity">Choisis ton idée</label>
+      <select id="activity" name="activity" required>
+        <option value="Un dîner romantique">Un dîner romantique</option>
+        <option value="Un cinéma">Un cinéma</option>
+        <option value="Une promenade au coucher du soleil">Une promenade au coucher du soleil</option>
+        <option value="Un pique-nique">Un pique-nique</option>
+        <option value="Un café cozy">Un café cozy</option>
+      </select>
+
+      <label for="date">Sélectionne une date</label>
+      <input type="date" id="date" name="date" required />
+
+      <button class="submit-btn" type="submit">Envoyer ma réponse</button>
+    </form>
+
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    const noButton = document.getElementById('noBtn');
+    const buttonsContainer = document.getElementById('buttons');
+
+    noButton.addEventListener('mouseenter', moveNoButton);
+    noButton.addEventListener('mouseover', moveNoButton);
+    noButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      moveNoButton();
+      showMessage('Essaie encore 😘');
+    });
+
+    function moveNoButton() {
+      const containerRect = buttonsContainer.getBoundingClientRect();
+      const buttonRect = noButton.getBoundingClientRect();
+      const maxLeft = Math.max(0, containerRect.width - buttonRect.width - 20);
+      const maxTop = Math.max(0, containerRect.height - buttonRect.height - 20);
+      const left = Math.random() * maxLeft;
+      const top = Math.random() * maxTop;
+
+      noButton.style.left = `${left}px`;
+      noButton.style.top = `${top}px`;
+      noButton.style.transform = 'translate(0, 0)';
+    }
+
+    function showForm() {
+      document.getElementById('dateForm').classList.add('show');
+      buttonsContainer.style.display = 'none';
+    }
+
+    function showMessage(text) {
+      const message = document.getElementById('message');
+      message.textContent = text;
+      message.classList.add('show');
+    }
+
+    function checkSubmitted() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('submitted') === 'true') {
+        showMessage('Merci ! Ta réponse a bien été envoyée.');
+      }
+    }
+
+    document.getElementById('dateForm').addEventListener('submit', function (event) {
+      const date = document.getElementById('date').value;
+      if (!date) {
+        event.preventDefault();
+        showMessage('Choisis une date s’il te plaît 💕');
+      }
+    });
+
+    checkSubmitted();
+  </script>
+</body>
+
+</html>
